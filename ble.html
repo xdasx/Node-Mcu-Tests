@@ -1,0 +1,94 @@
+<!DOCTYPE HTML>
+<html>
+ <head>
+ <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script
+ <meta name="viewport" content="height=device-height,width=device-width,initial-scale=1.0,maximum-scale=1.0" >
+  <meta charset="utf-8">
+  <title>BLE</title>
+ </head>
+ <body>
+
+ <!-- <form action="cgi-bin/sh1.cgi">
+  <p><h1>configure Ble Bulbs</h1></p>
+  <p>
+  <select name="cmd">
+  <option value="set_color">Color</option>
+  <option value="set_warm_light">Warm</option>
+  <option value="turn">Swich</option>
+</select>
+<input type="text" name="s" value="State">
+<select name="mac">
+  <option value="999">All</option>
+  <option value="e5:2e:46:4e:3b:41">Table</option>
+  <option value="d0:6c:31:ce:ae:54">Left</option>
+  <option value="e2:d2:39:89:ac:9a">Right</option>
+</select>
+</p>
+  <p><button type="submit">Send</button></p>
+ </form> -->
+ <form id="postform" action="cgi-bin/hp2.cgi" Method="POST">
+    <label for="name">command</label>
+    <select name="cmd">
+		<option value="set_color">Color</option>
+		<option value="set_warm_light">Warm</option>
+		<option value="turn">Swich</option>
+	</select>
+	<Br>
+
+    <label for="email">State</label>
+    <input name="s" type="text" placeholder="Please enter state">
+<Br>
+    <label for="mac">Lamp</label>
+    <select name="mac">
+	  <option value="999">All</option>
+	  <option value="e5:2e:46:4e:3b:41">Table</option>
+	  <option value="d0:6c:31:ce:ae:54">Left</option>
+	  <option value="e2:d2:39:89:ac:9a">Right</option>
+	</select>  
+<Br>
+    <button type="submit">Send</button>
+</form>
+ <div id="contactResponse">
+
+ 
+set_color&emsp;&emsp;&emsp;name or hexadecimal value &emsp;<Br>
+set_warm_light&emsp;&emsp;&emsp;  intensity[0.0-1.0] <Br>
+turn&emsp;&emsp;&emsp;on|off        <Br>
+</div>
+
+ </body>
+ <script>
+ $("#postform").submit(function(event) 
+     {
+         /* stop form from submitting normally */
+         event.preventDefault();
+
+         /* get some values from elements on the page: */
+         var $form = $( this ),
+             $submit = $form.find( 'button[type="submit"]' ),
+             cmd_value = $form.find( 'select[name="cmd"]' ).val(),
+             s_value = $form.find( 'input[name="s"]' ).val(),
+             mac_value = $form.find( 'select[name="mac"]' ).val(),
+             url = $form.attr('action');
+
+         /* Send the data using post */
+         var posting = $.post( url, { 
+                           cmd: cmd_value, 
+                           s: s_value, 
+                           mac: mac_value 
+                       });
+
+         posting.done(function( data )
+         {
+             /* Put the results in a div */
+             $( "#contactResponse" ).html(data);
+
+             /* Change the button text. */
+             $submit.text('Sent');
+
+             /* Disable the button. 
+             $submit.attr("disabled", true);*/
+         });
+    });
+</script>
+</html>
